@@ -1,0 +1,1 @@
+This application makes it possible to visualise and analyse chemical datasets based on SMILES.
