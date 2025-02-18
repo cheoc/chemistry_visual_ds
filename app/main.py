@@ -204,7 +204,7 @@ def update_output(contents, filename):
         try:
             print("Loading pains")
             
-            df_pains = pd.read_csv("./data/pains_smarts.txt", sep="\t")
+            df_pains = pd.read_csv("../data/pains_smarts.txt", sep="\t")
              
         except Exception as ex:
             print(str(ex))
@@ -214,7 +214,7 @@ def update_output(contents, filename):
         try:
             print("Loading magic rings")
             
-            df_magic = pd.read_csv("./data/magic_rings.txt", sep="\t")
+            df_magic = pd.read_csv("../data/magic_rings.txt", sep="\t")
               
         except Exception as ex:
             print(str(ex))        
