@@ -190,8 +190,11 @@ def annotate_pains(df, df_pains):
         list_smarts_mols = get_molecules_from_list_smarts(df_pains["smarts"])
         list_smarts_info = df_pains["info"]
         
-        tl_tmp = Parallel(n_jobs=-1)(delayed(get_substruct_matches)(i, list_mols[i], list_smarts_mols) for i in tqdm(range(len(list_mols))))    
-                
+        # print(list_smarts_mols)
+
+        tl_tmp = Parallel(n_jobs=-1)(delayed(get_substruct_matches)(i, list_mols[i], list_smarts_mols) for i in tqdm(range(len(list_mols)), desc="PAINS search"))    
+        
+        print("tl_tmp", tl_tmp)
                 
         df["pains"] = ["" for i in range(len(df))]
         #df["pains_info"] = ['' for i in range(len(df))]
@@ -236,8 +239,8 @@ def annotate_magic_rings(df, df_magic_rings):
         
         list_mols = get_molecules_from_list_smiles(df["smiles"])
         list_magic_mols = get_molecules_from_list_smiles(df_magic_rings["smiles"])
-               
-        tl_tmp = Parallel(n_jobs=-1)(delayed(get_substruct_matches)(i, list_mols[i], list_magic_mols) for i in tqdm(range(len(list_mols))))    
+
+        tl_tmp = Parallel(n_jobs=-1)(delayed(get_substruct_matches)(i, list_mols[i], list_magic_mols) for i in tqdm(range(len(list_mols)), desc="Magic rings search"))    
         
         print(len(tl_tmp))
         for tl_mol in tl_tmp:
@@ -579,7 +582,9 @@ def smi_match2svg(smi, matches, x=210, y=210):
         
         print(smi)
         print(matches)
-        drawer = Draw.MolsToGridImage([mol],highlightAtomLists=matches[0][2])
+        print(matches[0][2])
+
+        drawer = Draw.MolsToGridImage([mol],highlightAtomLists=matches[0][2], useSVG=True)
 
         # drawer = Draw.MolDraw2DSVG(210,210)
 
@@ -602,13 +607,13 @@ def smi_match2svg(smi, matches, x=210, y=210):
         
         # drawer = Draw.MolDraw2DSVG(200,200)
         
-        drawer.FinishDrawing()
-        svg = drawer.GetDrawingText().replace('svg:','')    
+        # drawer.FinishDrawing()
+        # svg = drawer.GetDrawingText().replace('svg:','')    
         #print(svg)
     except Exception as ex:
         print("ERROR", str(ex))    
         
-    return svg 
+    return drawer 
 
 def smi2svg_logp(smi):
     svg = ""

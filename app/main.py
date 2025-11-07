@@ -161,7 +161,7 @@ def update_output(contents, filename):
                 # delimiter = sniffer.sniff(decoded).delimiter    
                 # print(delimiter.string)          
                 try:            
-                    df = pd.read_csv(StringIO(decoded), sep=",|;", engine="python") 
+                    df = pd.read_csv(StringIO(decoded), sep=",|;|\t", engine="python") 
                 except:
                     try:
                         df = pd.read_csv(StringIO(decoded), sep=None, engine='python') 
@@ -274,6 +274,8 @@ def on_data_set_table_pains(data, data_pains):
 
             tl_matches = helper_chemistry.annotate_pains(df, df_pains)
             
+            print("pains matches", tl_matches)
+
             #print(df[(df["pains"] != "")]["pains"])
             
             nof_pains = len(df[df["pains"] != ""]) 
@@ -491,13 +493,13 @@ def update_molecules_table(t_main_ac, t_pains_ac, t_magic_ac, data, data_pains, 
                 print("m2s select", tl_selection)
                 df_show["magic_rings"] = [helper_chemistry.smi_match2svg(df["smiles"].iloc[i], dict_magic_container[i], x=100, y=100) for i in tl_selection]
 
-                print(df_show["magic_rings"].head(2))
+                # print(df_show["magic_rings"].head(2))
             
             columns=[
                 {"name": col, "id": col, "presentation": "markdown"}
-                if col == "molecule"
+                if col == "molecule" or col == "magic_rings"
                 else {"name": col, "id": col}
-                for col in df_show[["ID", "molecule", "Molecular weight"]].columns
+                for col in df_show[["ID", "molecule", "magic_rings", "Molecular weight"]].columns
             ]            
             
             return df_show.to_dict("records"), columns, None
